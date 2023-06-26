@@ -7,6 +7,8 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc"
 import Modal from "./Modal";
+import Heading from "../Heading";
+import Input from "../inputs/Input";
 
 
 const RegisterModal = () => {
@@ -37,6 +39,18 @@ const RegisterModal = () => {
             })
     }
 
+
+    const bodyContent = (
+        <div className="flex flex-col gap-4">
+            <Heading
+                title="Welcome Mamun"
+                subtitle="Create an Account"
+            />
+
+            <Input />
+        </div>
+    )
+
     return (
         <div>
             <Modal
@@ -46,6 +60,7 @@ const RegisterModal = () => {
                 actionLabel="Continue"
                 onClose={registerModal.onClose}
                 onSubmit={handleSubmit(onSubmit)}
+                body={bodyContent}
             />
         </div>
     );
