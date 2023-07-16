@@ -1,6 +1,8 @@
 'use client'
 
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
+
 import axios from "axios";
 import { useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
@@ -13,9 +15,11 @@ import { toast } from "react-hot-toast"
 import Button from "../Button";
 
 
-const RegisterModal = () => {
+const LoginModal = () => {
 
     const registerModal = useRegisterModal();
+    const loginModal = useLoginModal();
+
     const [isLoading, setIsLoading] = useState(false)
 
     const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
@@ -45,21 +49,13 @@ const RegisterModal = () => {
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Heading
-                title="Welcome To Airbnb"
-                subtitle="Create an Account"
+                title="Welcome Back to Airbnb"
+                subtitle="Login to your account"
             />
 
             <Input
                 id="email"
                 label="Email"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-            />
-            <Input
-                id="name"
-                label="Name"
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -94,10 +90,10 @@ const RegisterModal = () => {
             />
             <div className="justify-center flex flex-row items-center gap-2">
                 <div>
-                    Already have an account
+                    Don't have any account
                 </div>
-                <div onClick={registerModal.onClose} className="text-neutral-800 cursor-pointer hover:underline hover:text-rose-500">
-                    Log in
+                <div onClick={loginModal.onClose} className="text-neutral-800 cursor-pointer hover:underline hover:text-rose-500">
+                    Sign Up
                 </div>
             </div>
         </div>
@@ -107,10 +103,10 @@ const RegisterModal = () => {
         <div>
             <Modal
                 disabled={isLoading}
-                isOpen={registerModal.isOpen}
-                title="Register"
-                actionLabel="Continue"
-                onClose={registerModal.onClose}
+                isOpen={loginModal.isOpen}
+                title="Login Form"
+                actionLabel="Login"
+                onClose={loginModal.onClose}
                 onSubmit={handleSubmit(onSubmit)}
                 body={bodyContent}
                 footer={footerContent}
@@ -119,4 +115,4 @@ const RegisterModal = () => {
     );
 };
 
-export default RegisterModal;
+export default LoginModal;
