@@ -3,7 +3,7 @@
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 
-import axios from "axios";
+import { signIn } from 'next-auth/react';
 import { useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { AiFillGithub } from "react-icons/ai";
@@ -13,10 +13,12 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import { toast } from "react-hot-toast"
 import Button from "../Button";
+import { useRouter } from "next/navigation";
 
 
 const LoginModal = () => {
 
+    const router = useRouter();
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
 
@@ -33,15 +35,23 @@ const LoginModal = () => {
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true)
 
-        axios.post("/api/register", data)
-            .then(() => {
-                registerModal.onClose();
-            })
-            .catch((error) => {
-                toast.error("Something went wrong")
-            })
-            .finally(() => {
+        signIn("credentials", {
+            ...data,
+            redirect: false,
+        })
+
+            .then((callback) => {
                 setIsLoading(false);
+
+                if (callback?.ok) {
+                    toast.success("Logged in")
+                    router.refresh();
+                    loginModal.onClose();
+                }
+
+                if (callback?.error) {
+                    toast.error(callback.error)
+                }
             })
     }
 
@@ -90,7 +100,7 @@ const LoginModal = () => {
             />
             <div className="justify-center flex flex-row items-center gap-2">
                 <div>
-                    Don't have any account
+                    Do not have any account
                 </div>
                 <div onClick={loginModal.onClose} className="text-neutral-800 cursor-pointer hover:underline hover:text-rose-500">
                     Sign Up
